@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cipher Bureau — Classical Cryptography Casebook</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='46' fill='%230c0b0f' stroke='%23e0a940' stroke-width='5'/%3E%3Ctext x='50' y='64' font-size='50' text-anchor='middle' fill='%23f4c869' font-family='Georgia,serif'%3E%E2%9A%9F%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ======================= ACCESS GATE ======================= -->
+<div class="gate" id="gate">
+  <div class="card-clip gate-card" id="gateCard">
+    <!-- content injected by JS: setup / unlock -->
+  </div>
+</div>
+
+<!-- ======================= MAIN APP ======================= -->
+<div id="app">
+
+  <header class="site">
+    <div class="nav-row">
+      <a class="brand" href="#top">
+        <span class="brand-mark">⚟</span>
+        <span class="brand-name">Cipher Bureau<span class="sub">CLASSICAL CRYPTOGRAPHY CASEBOOK</span></span>
+      </a>
+      <nav class="tabs-nav" id="tabsNav">
+        <a href="#tool">Toolkit</a>
+        <a href="#files">Files</a>
+        <a href="#algorithms">Algorithms</a>
+        <a href="#security">Security</a>
+      </nav>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">☰</button>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- ======================= HERO ======================= -->
+    <section class="hero" style="border-top:none;">
+      <div class="wrap hero-grid">
+        <div>
+          <div class="hero-tag"><span class="dot"></span>EIGHT CIPHERS, ONE CASEBOOK</div>
+          <h1>Encode a secret.<br>Then <span class="decode-word">unravel</span> it back exactly.</h1>
+          <p class="lede">A field kit of classical ciphers — the pencil-and-paper methods that carried real secrets long before computers did. Type a message, pick a method, and watch it turn to code and back again, letter for letter.</p>
+          <div class="scramble-line mono" id="scrambleLine"></div>
+          <div class="hero-actions">
+            <button class="btn btn-primary" onclick="document.getElementById('tool').scrollIntoView({behavior:'smooth'})">Open the toolkit</button>
+            <button class="btn btn-ghost" onclick="document.getElementById('algorithms').scrollIntoView({behavior:'smooth'})">Read the methods</button>
+          </div>
+        </div>
+        <div class="disc-wrap" id="discWrap"></div>
+      </div>
+    </section>
+
+    <!-- ======================= TOOLKIT ======================= -->
+    <section id="tool">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>The toolkit</h2>
+          <p>Choose a cipher and a key, then run your message through it. Every method here decrypts back to the exact text you started with — that's the one rule a cipher is never allowed to break.</p>
+        </div>
+
+        <div class="card-clip toolkit-grid">
+          <div class="panel-left">
+            <span class="field-label">CIPHER</span>
+            <div class="cipher-tabs" id="cipherTabs"></div>
+
+            <span class="field-label">OPERATION</span>
+            <div class="op-toggle" id="opToggle">
+              <button data-op="encrypt" class="active">Encrypt</button>
+              <button data-op="decrypt">Decrypt</button>
+            </div>
+
+            <div class="field-block">
+              <span class="field-label" id="keyLabel">KEY</span>
+              <div class="key-input-row">
+                <input type="text" id="keyInput" placeholder="">
+                <button class="btn btn-sm btn-ghost" id="genKeyBtn" title="Generate a key">⟲ Generate</button>
+              </div>
+              <p class="key-hint" id="keyHint"></p>
+              <div class="key-note" id="keyNote" style="display:none;"></div>
+            </div>
+          </div>
+
+          <div>
+            <div class="io-grid">
+              <div>
+                <div class="io-head">
+                  <span class="field-label">INPUT TEXT</span>
+                  <div class="io-actions">
+                    <button class="icon-btn" id="sampleBtn">Use sample</button>
+                    <button class="icon-btn" id="clearBtn">Clear</button>
+                  </div>
+                </div>
+                <textarea id="inputText" placeholder="Type or paste your message…"></textarea>
+              </div>
+              <div>
+                <div class="io-head">
+                  <span class="field-label">RESULT</span>
+                  <div class="io-actions">
+                    <button class="icon-btn" id="copyBtn">Copy</button>
+                    <button class="icon-btn" id="downloadBtn">Download .txt</button>
+                  </div>
+                </div>
+                <div class="result-box">
+                  <div class="stamp" id="stamp">ENCRYPTED</div>
+                  <textarea id="resultText" placeholder="Your result will appear here…" readonly></textarea>
+                </div>
+              </div>
+            </div>
+
+            <div class="run-row">
+              <button class="btn btn-primary" id="runBtn">Run cipher</button>
+              <span class="key-hint" style="margin-top:0;" id="runStatus"></span>
+            </div>
+            <div class="status-msg" id="statusMsg"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================= FILE TOOLS ======================= -->
+    <section id="files">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Files</h2>
+          <p>Run the cipher and key from the toolkit above against a whole text file, then save the outcome back to disk.</p>
+        </div>
+        <div class="card-clip" style="padding:28px;">
+          <div class="file-panel">
+            <div>
+              <label class="drop-zone" id="dropZone">
+                <input type="file" id="fileInput" accept=".txt,.md,.csv,text/plain">
+                <div class="dz-title">Choose a text file</div>
+                <div class="dz-sub">.txt, .md, or .csv — read entirely in your browser, never uploaded anywhere</div>
+              </label>
+              <div class="file-meta" id="fileMeta">No file loaded.</div>
+            </div>
+            <div>
+              <span class="field-label">FILE RESULT</span>
+              <textarea id="fileResult" readonly placeholder="Load a file, then process it using the cipher and key set above…" style="min-height:110px;"></textarea>
+              <div class="run-row" style="margin-top:14px;">
+                <button class="btn btn-teal" id="processFileBtn">Process file</button>
+                <button class="btn btn-ghost" id="downloadFileBtn">Save result to file</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================= ALGORITHMS ======================= -->
+    <section id="algorithms">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Eight classical methods</h2>
+          <p>Each entry in the casebook trades security for something else — speed, simplicity, or teaching value. None would hold up against modern cryptanalysis, which is exactly what makes them worth studying.</p>
+        </div>
+        <div class="algo-grid" id="algoGrid"></div>
+      </div>
+    </section>
+
+    <!-- ======================= SECURITY ======================= -->
+    <section id="security">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Access to this casebook</h2>
+          <p>An access code keeps the toolkit closed until the right code is entered on this device. It's stored only in your browser — there's no server, no account, and no recovery beyond the reset below.</p>
+        </div>
+        <div class="security-grid">
+          <div class="card-clip" style="padding:26px;">
+            <h3 style="font-size:16px; margin-bottom:6px;">Access code</h3>
+            <div class="switch-row">
+              <div class="switch-label">Require a code to open the toolkit
+                <span class="desc">When off, anyone on this device can open Cipher Bureau directly.</span>
+              </div>
+              <div class="switch" id="protectSwitch"><div class="knob"></div></div>
+            </div>
+            <div id="changePwBlock" style="margin-top:18px; display:none;">
+              <div class="field-block">
+                <span class="field-label">CURRENT CODE</span>
+                <input type="password" id="currentPwInput" placeholder="Enter current code">
+              </div>
+              <div class="field-block">
+                <span class="field-label">NEW CODE</span>
+                <input type="password" id="newPwInput" placeholder="At least 4 characters">
+              </div>
+              <div class="field-block">
+                <span class="field-label">CONFIRM NEW CODE</span>
+                <input type="password" id="confirmPwInput" placeholder="Repeat new code">
+              </div>
+              <button class="btn btn-teal btn-sm" id="updatePwBtn">Update code</button>
+              <span class="key-hint" id="pwUpdateStatus" style="display:block; margin-top:10px;"></span>
+            </div>
+          </div>
+          <div class="card-clip" style="padding:26px;">
+            <h3 style="font-size:16px; margin-bottom:12px;">Reset</h3>
+            <p style="font-size:13px; color:var(--ink-dim); line-height:1.6;">Forgotten the code, or want to start over? This clears the saved code and locking preference from this browser. It does not touch anything you've encrypted — those results only ever lived in the boxes above.</p>
+            <button class="btn btn-danger btn-sm" id="resetPwBtn" style="margin-top:16px;">Reset access code</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <p>Cipher Bureau — an educational casebook of classical ciphers. Nothing here is fit for real secrets.</p>
+      <p id="yearFoot"></p>
+    </div>
+  </footer>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
